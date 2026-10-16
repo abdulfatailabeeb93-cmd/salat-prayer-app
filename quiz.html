@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبر نفسك | صفة الصلاة في المذاهب الأربعة</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0e5e4a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="صفة الصلاة">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+:root{ --bg:#faf7ef; --bg2:#fffdf7; --card:#fff; --ink:#2a2620; --muted:#8a7f6c; --green:#0e5e4a; --green2:#147a60; --gold:#b8860b; --gold2:#d4af37; --border:#e9dfc6; --soft:#eef5f0; --ok:#15803d; --bad:#b91c1c; --shadow:0 12px 32px rgba(60,50,20,.08); }
+[data-theme="dark"]{ --bg:#0d1512; --bg2:#111c17; --card:#182420; --ink:#f0e9d6; --muted:#ab9f87; --border:#2b3b34; --soft:#1c332b; }
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Amiri,serif;background:var(--bg);color:var(--ink);line-height:2}
+h1,h2,.btn,.top-title,.score-box,.q-num{font-family:Tajawal,sans-serif}
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:color-mix(in srgb, var(--bg2) 90%, transparent);border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:900px;margin:auto;padding:10px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--green),var(--green2));display:grid;place-items:center;color:#fff;font-size:22px}
+.top-title b{display:block;font-size:17px} .top-title small{color:var(--muted);font-size:13px;font-family:Amiri,serif}
+.actions{margin-inline-start:auto;display:flex;gap:8px}
+.btn{border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:linear-gradient(135deg,#0e5e4a,#1a8a6b);color:#fff;border:none}
+.btn-gold{background:linear-gradient(135deg,#b8860b,#d4af37);color:#fff;border:none}
+.wrap{max-width:900px;margin:22px auto 60px;padding:0 18px}
+.hero{background:linear-gradient(135deg,#0c4f3e,#1d9a78);color:#fdf8e7;border-radius:24px;padding:30px 26px;border:1px solid rgba(212,175,55,.45);box-shadow:var(--shadow)}
+.hero h1{margin:0;font-size:28px} .hero p{margin:8px 0 0;font-size:18px;font-family:Amiri,serif}
+.score-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 18px;margin:14px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:var(--shadow);position:sticky;top:70px;z-index:30}
+.score-box b{font-size:18px;color:var(--green)} .bar{flex:1;min-width:140px;height:12px;background:var(--soft);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--green2));transition:.4s}
+.q{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
+.q-head{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.q-num{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;min-width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:800}
+.q-head h2{margin:0;font-size:18px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.opt{border:1.5px solid var(--border);background:var(--bg2);border-radius:12px;padding:10px 14px;font-size:18px;cursor:pointer;text-align:right;font-family:Amiri,serif;transition:.15s;width:100%}
+.opt:hover{border-color:var(--gold2)}
+.opt.correct{border-color:var(--ok);background:#ecfdf5;color:#14532d;font-weight:700}
+.opt.wrong{border-color:var(--bad);background:#fef2f2;color:#7f1d1d}
+[data-theme="dark"] .opt.correct{background:#052e1f;color:#a7f3d0} [data-theme="dark"] .opt.wrong{background:#3b0d0d;color:#fecaca}
+.evidence{display:none;margin-top:12px;background:var(--soft);border:1px dashed var(--gold2);border-radius:12px;padding:10px 14px;font-size:17px}
+.evidence.show{display:block} .evidence strong{color:var(--green)}
+.q.ok{border-color:var(--ok)} .q.no{border-color:var(--bad)}
+.result{display:none;background:var(--card);border:2px solid var(--gold2);border-radius:20px;padding:24px;text-align:center;box-shadow:var(--shadow);margin-top:16px}
+.result.show{display:block} .result .big{font-size:44px}
+/* نافذة إشعار التثبيت كتطبيق */
+.install-pop{position:fixed;bottom:16px;right:16px;left:16px;z-index:90;max-width:540px;margin-inline:auto;background:var(--card);border:1.5px solid var(--gold2);border-radius:18px;box-shadow:var(--shadow);padding:12px 14px;display:flex;gap:12px;align-items:center}
+.install-pop[hidden]{display:none!important}
+.install-pop img{border-radius:12px;flex-shrink:0}
+.install-pop-text{flex:1;line-height:1.7;min-width:0}
+.install-pop-text b{font-family:Tajawal,sans-serif;font-size:15px;display:block}
+.install-pop-text small{color:var(--muted);font-size:13px}
+.install-pop-actions{display:flex;gap:6px;flex-shrink:0}
+.install-pop-x{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px;align-self:flex-start}
+@media(max-width:560px){.install-pop{flex-wrap:wrap}.install-pop-actions{width:100%}.install-pop-actions .btn{flex:1;justify-content:center}}
+@media print{.install-pop{display:none!important}}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;font-family:Tajawal}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner">
+  <div class="brand"><div class="brand-mark">📝</div><div class="top-title"><b>صفحة الأسئلة — اختبر نفسك</b><small>اختيار متعدد مع الدليل من الملف نفسه</small></div></div>
+  <div class="actions"><a class="btn" href="index.html">🏠 الرئيسية</a><button class="btn" id="themeBtn">🌙</button></div>
+</div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>أسئلة في صفة الصلاة على المذاهب الأربعة</h1>
+    <p>أجب عن 14 سؤالًا — بعد كل إجابة يظهر لك <b>الدليل من الملف نفسه</b>. الدرجة من 100% وتظهر في النهاية.</p>
+  </div>
+
+  <div class="score-box">
+    <b id="scoreLabel">النتيجة: 0 / 14</b>
+    <div class="bar"><div id="scoreBar"></div></div>
+    <button class="btn btn-gold" id="resetBtn">↺ إعادة</button>
+    <a class="btn btn-primary" href="index.html">← مراجعة الشرح</a>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="result" id="result">
+    <div class="big" id="resultEmoji">🎉</div>
+    <h2 id="resultTitle" style="margin:6px 0"></h2>
+    <p id="resultText" style="font-size:19px"></p>
+    <button class="btn btn-gold" onclick="window.scrollTo({top:0,behavior:'smooth'})">مراجعة الإجابات ↑</button>
+    <a class="btn btn-primary" href="index.html">العودة للصفحة الرئيسة</a>
+  </div>
+</div>
+<!-- إشعار التثبيت كتطبيق -->
+<div class="install-pop no-print" id="installPop" hidden>
+  <img src="icons/icon-192.png" alt="أيقونة التطبيق" width="52" height="52">
+  <div class="install-pop-text"><b>📲 ثبّت الموقع كتطبيق على هاتفك</b><small id="installPopHint">يعمل دون اتصال — سريع وخفيف</small></div>
+  <div class="install-pop-actions">
+    <button class="btn btn-gold" id="installBtn">تثبيت</button>
+    <button class="btn" id="installLater">لاحقًا</button>
+  </div>
+  <button class="install-pop-x" id="installX" title="إغلاق">✕</button>
+</div>
+<footer>جميع الأدلة مقتبسة نصًّا من بحث «صفة الصلاة في المذاهب الأربعة» المعروض في الصفحة الرئيسة.</footer>
+
+<script>
+const QS = [
+{q:"ما حكم النية في الصلاة عند المذاهب الأربعة؟",o:["سنة مستحبة فقط","شرط لصحة الصلاة","مباحة لا أثر لها","ركن خاص بالشافعية فقط"],a:1,ev:"الدليل من الملف: «النية شرط لصحة الصلاة عند المذاهب الأربعة، وأصلها حديث: إنما الأعمال بالنيات (البخاري ومسلم)، ومحلها القلب»."},
+{q:"ما حكم تكبيرة الإحرام؟ وما لفظها المشهور؟",o:["واجبة فقط عند الحنفية / لفظها: سبحان الله","ركن لا تنعقد الصلاة بدونها عند الجمهور / «الله أكبر»","سنة يُستغنى عنها بالنية","شرط خارج الصلاة"],a:1,ev:"الدليل من الملف: «تكبيرة الإحرام ركن لا تنعقد الصلاة بدونها عند جمهور الفقهاء… واللفظ المشهور: الله أكبر»، ويُستدل بحديث: «مفتاح الصلاة الطهور، وتحريمها التكبير، وتحليلها التسليم»."},
+{q:"ما المشهور عند الحنفية والمالكية في رفع اليدين في الصلاة المعتادة؟",o:["الرفع في كل تكبيرة","الاقتصار على الرفع عند تكبيرة الإحرام / الافتتاح","عدم الرفع مطلقًا حتى عند الافتتاح","الرفع فقط في السجود"],a:1,ev:"الدليل من الملف: «المشهور عند الحنفية والمالكية الاقتصار على الرفع عند تكبيرة الإحرام»، بينما يستحب الشافعية والحنابلة الرفع في المواضع الواردة (الركوع والرفع منه…). وثبت الرفع عند الافتتاح في الصحيحين من حديث ابن عمر."},
+{q:"ما المشهور عند المالكية في وضع اليدين (القبض) في الفريضة؟",o:["القبض واجب","الإرسال في الفريضة مع تفصيل (والقبض عند بعضهم في النافلة)","التكتيف على الصدر فرض","لا توجد رواية في المذهب"],a:1,ev:"الدليل من الملف: «المشهور عند المالكية في الفريضة إرسال اليدين، مع ذكر القبض في النافلة عند طائفة من المالكية»، ويُستحب الوضع عند الحنفية والشافعية والحنابلة (حديث سهل بن سعد في البخاري)."},
+{q:"ما قول الشافعية في البسملة قبل الفاتحة؟",o:["تُترك مطلقًا","تُقرأ سرًّا فقط","آية من الفاتحة تُقرأ ويُجهر بها في مواضع الجهر","مكروهة"],a:2,ev:"الدليل من الملف (جدول الخلاف): الشافعية «يعدّونها آية من الفاتحة ويقرؤونها، ويجهرون بها في مواضع الجهر على المعتمد عندهم»."},
+{q:"ما المشهور عند المالكية في البسملة في الفريضة؟",o:["الجهر بها دائمًا","تركها في الفريضة قبل الفاتحة","وجوبها ركنًا","قراءتها بعد السورة"],a:1,ev:"الدليل من الملف: «المشهور عند المالكية عدم قراءتها في الفريضة قبل الفاتحة، مع وجود تفصيل في النوافل وغيرها»."},
+{q:"ما دليل وجوب/ركنية قراءة الفاتحة؟",o:["حديث: «لا صلاة لمن لم يقرأ بفاتحة الكتاب» (البخاري ومسلم)","الإجماع على تركها","حديث ضعيف في السنن","عمل أهل المدينة فقط"],a:0,ev:"الدليل من الملف: «قراءة الفاتحة من أعظم أركان القراءة… بحديث عبادة بن الصامت: لا صلاة لمن لم يقرأ بفاتحة الكتاب (البخاري ومسلم)»."},
+{q:"ما موقف الحنفية من قراءة المأموم خلف الإمام في المشهور؟",o:["يقرأ الفاتحة وجوبًا","لا يقرأ خلف الإمام","يقرأ السورة فقط","يخيَّر"],a:1,ev:"الدليل من الملف: «الحنفية لا يوجبون قراءة المأموم خلف الإمام»، والشافعية يوجبونها في الجملة، وللمالكية والحنابلة تفصيل بين الجهر والسر — مع الجمع بين أحاديث الفاتحة وأحاديث الإنصات."},
+{q:"ما حكم الطمأنينة في الركوع؟ وما دليلها؟",o:["سنة خفيفة","ركن عند جمهور الفقهاء — حديث المسيء صلاته","مكروهة","خاصة بالنوافل"],a:1,ev:"الدليل من الملف: «الطمأنينة ركن عند جمهور الفقهاء… ويُستدل بأمر النبي ﷺ للمسيء صلاته أن يركع حتى يطمئن راكعًا ثم يرفع حتى يعتدل قائمًا»."},
+{q:"على كم عضوٍ يكون السجود؟ وما نص الحديث؟",o:["خمسة أعضاء","سبعة أعظم: الجبهة (والأنف) واليدان والركبتان وأطراف القدمين","عضو واحد (الجبهة فقط)","ثمانية"],a:1,ev:"الدليل من الملف: قال ﷺ: «أُمرت أن أسجد على سبعة أعظم: على الجبهة — وأشار بيده إلى أنفه — واليدين والركبتين وأطراف القدمين» (البخاري ومسلم)."},
+{q:"ما حكم التشهد الأخير عند الشافعية والحنابلة (في الجملة)؟",o:["سنة","ركن","مباح","مكروه"],a:1,ev:"الدليل من الملف (الجدول والنص): «التشهد الأخير… ركن» عند الشافعية والحنابلة في الجملة، وفرض/ركن عند المالكية، وواجب عند الحنفية مع تفصيل — وأشهر صيغه تشهد ابن مسعود في الصحيحين."},
+{q:"بماذا يُستدل على أن التسليم مخرج من الصلاة؟",o:["بحديث: «وتحليلها التسليم» وجاءت أحاديث في التسليمتين","بالقياس فقط","لا دليل عليه","بآية المائدة"],a:0,ev:"الدليل من الملف: «يُعد التسليم مخرجًا من الصلاة، ويُستدل بحديث: وتحليلها التسليم»، وثبت أن النبي ﷺ كان يسلّم، وجاءت أحاديث في التسليمتين."},
+{q:"أي كتاب جعله البحث محورًا لفهم أسباب اختلاف الفقهاء؟",o:["المبسوط للسرخسي","بداية المجتهد ونهاية المقتصد لابن رشد","المدونة فقط","صحيح البخاري"],a:1,ev:"الدليل من الملف: «يعتمد البحث منهج المقارنة، مع جعل بداية المجتهد ونهاية المقتصد لابن رشد محورًا لفهم أسباب اختلاف الفقهاء» لأنه يعتني ببيان أسباب الاختلاف وأصوله."},
+{q:"من أسباب اختلاف الفقهاء في صفة الصلاة؟",o:["اختلافهم في ثبوت الأحاديث والجمع بين الروايات وفهم الأمر (وجوب/استحباب) وتحديد الركن والواجب والسنة","اتفاقهم على كل شيء","عدم وجود أدلة أصلًا","سبب واحد فقط لا غير"],a:0,ev:"الدليل من الملف (ثامنًا): (1) اختلافهم في ثبوت الأحاديث وقوة دلالتها (2) الجمع بين الروايات كالجهر بالبسملة والإسرار بها (3) فهم الأمر: وجوب أم استحباب (4) اعتبار عمل أهل المدينة (5) تحديد الركن والواجب والسنة."}
+];
+const box=document.getElementById('quiz');let score=0,answered=0;
+QS.forEach((q,i)=>{
+  const d=document.createElement('div');d.className='q';d.id='q'+i;
+  d.innerHTML=`<div class="q-head"><span class="q-num">${i+1}</span><h2>${q.q}</h2></div><div class="opts"></div><div class="evidence">📖 ${q.ev}</div>`;
+  const opts=d.querySelector('.opts');
+  q.o.forEach((t,j)=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=t;
+    b.onclick=()=>{
+      if(d.classList.contains('ok')||d.classList.contains('no'))return;
+      const ev=d.querySelector('.evidence');ev.classList.add('show');
+      const btns=[...opts.children];
+      btns[q.a].classList.add('correct');
+      if(j===q.a){d.classList.add('ok');score++;}else{b.classList.add('wrong');d.classList.add('no');}
+      answered++;update();
+    };
+    opts.appendChild(b);
+  });
+  box.appendChild(d);
+});
+function update(){
+  document.getElementById('scoreLabel').textContent=`النتيجة: ${score} / ${QS.length} (أجبت ${answered})`;
+  document.getElementById('scoreBar').style.width=(score/QS.length*100)+'%';
+  if(answered===QS.length){
+    const pct=Math.round(score/QS.length*100);
+    const r=document.getElementById('result');r.classList.add('show');
+    document.getElementById('resultTitle').textContent=`نتيجتك: ${score}/${QS.length} — ${pct}%`;
+    document.getElementById('resultText').textContent=pct===100?'ممتاز! إتقان كامل لصفة الصلاة عند المذاهب الأربعة.':pct>=70?'أحسنت! فهم جيد، راجع الأدلة التي أخطأت فيها بالأعلى.':'لا بأس — عُد إلى الصفحة الرئيسة وراجع الشرح ثم حاول مجددًا.';
+    document.getElementById('resultEmoji').textContent=pct===100?'🏆':pct>=70?'🎉':'📖';
+    r.scrollIntoView({behavior:'smooth'});
+  }
+}
+document.getElementById('resetBtn').onclick=()=>{score=0;answered=0;document.querySelectorAll('.q').forEach(q=>{q.classList.remove('ok','no');q.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));q.querySelector('.evidence').classList.remove('show');});document.getElementById('result').classList.remove('show');update();window.scrollTo({top:0,behavior:'smooth'});};
+let theme=localStorage.getItem('salat-theme')||'light';
+function apply(){document.documentElement.dataset.theme=theme;document.getElementById('themeBtn').textContent=theme==='dark'?'☀️':'🌙';}
+document.getElementById('themeBtn').onclick=()=>{theme=theme==='dark'?'light':'dark';localStorage.setItem('salat-theme',theme);apply();};apply();update();
+</script>
+<script>
+// تسجيل عامل الخدمة: فقط على الموقع المنشور (http/https غير محلي) وخارج إطارات المعاينة — لا يُسجَّل في التطوير ولا داخل المعاينة
+(function(){if(!('serviceWorker' in navigator))return;if(window.self!==window.top)return;if(!/^https?:$/.test(location.protocol))return;var h=location.hostname||'';if(h===''||h==='localhost'||h==='127.0.0.1'||h==='[::1]'||/\.local$/.test(h)||/^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(h))return;window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});})();
+</script>
+<script>
+// إشعار التثبيت كتطبيق: يظهر بعد 3 ثوانٍ مرة واحدة كل 7 أيام، ولا يظهر داخل المعاينة ولا إذا كان التطبيق مثبتًا
+(function(){
+  var pop=document.getElementById('installPop');if(!pop||window.self!==window.top)return;
+  function isStandalone(){return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;}
+  if(isStandalone())return;
+  var KEY='salat-install-dismissed';
+  try{if(Date.now()-(parseInt(localStorage.getItem(KEY)||'0',10))<7*864e5)return;}catch(e){}
+  var deferred=null,btn=document.getElementById('installBtn'),hint=document.getElementById('installPopHint');
+  var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent||'');
+  function hide(save){pop.hidden=true;if(save){try{localStorage.setItem(KEY,String(Date.now()));}catch(e){}}}
+  document.getElementById('installLater').onclick=function(){hide(true);};
+  document.getElementById('installX').onclick=function(){hide(true);};
+  if(isIOS){hint.textContent='من زر المشاركة ⎙ اختر «إضافة إلى الشاشة الرئيسية»';btn.textContent='فهمت';btn.onclick=function(){hide(true);};setTimeout(function(){pop.hidden=false;},3000);return;}
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;setTimeout(function(){pop.hidden=false;},3000);});
+  btn.onclick=function(){if(!deferred){hide(false);return;}try{deferred.prompt();deferred.userChoice.then(function(){deferred=null;hide(true);}).catch(function(){});}catch(e){hide(false);}};
+  window.addEventListener('appinstalled',function(){hide(true);});
+})();
+</script>
+</body>
+</html>
