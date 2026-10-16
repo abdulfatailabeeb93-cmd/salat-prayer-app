@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<!-- سجل التغييرات — 2026-10-16: (1) زر «ملف PDF» أصبح يعرض البحث في نافذة داخلية دون أي إحالة خارجية (iframe لـ research.pdf إن وُجد، وإلا نص داخلي + طباعة/حفظ PDF). (2) زر «إخفاء/إظهار الفهرس» لتوسيع القراءة مع حفظ الاختيار. | نسخة snapshot محفوظة (للقراءة فقط) في: salat/snapshots/2026-10-16_v1-pdf-modal-toc-toggle/ — لا تعدّلها؛ عند أي تغيير مستقبلي أنشئ مجلد snapshot جديد بنفس النمط -->
+<!-- سجل التغييرات — 2026-10-16 (PWA دون اتصال): manifest.webmanifest + أيقونات 192/512 وmaskable و180 + sw.js (الشبكة أولًا للصفحات، التخزين أولًا للملفات) + خطوط مستضافة محليًا في fonts/ + تسجيل عامل الخدمة على المنشور فقط (لا تطوير ولا معاينة) -->
+<!-- سجل التغييرات — 2026-10-16 (إشعار التثبيت): نافذة install-pop في index وquiz (زر تثبيت عبر beforeinstallprompt + تعليمات iOS + ظهور مرة كل 7 أيام + لا داخل المعاينة ولا عند التثبيت) -->
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صفة الصلاة في المذاهب الفقهية الأربعة | دراسة مقارنة</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0e5e4a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="صفة الصلاة">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+:root{
+  --bg:#faf7ef; --bg2:#fffdf7; --card:#ffffff; --ink:#2a2620; --muted:#8a7f6c;
+  --green:#0e5e4a; --green2:#147a60; --gold:#b8860b; --gold2:#d4af37;
+  --border:#e9dfc6; --soft:#eef5f0; --shadow:0 12px 32px rgba(60,50,20,.08);
+  --radius:18px; --font-size:19px;
+}
+[data-theme="dark"]{ --bg:#0d1512; --bg2:#111c17; --card:#182420; --ink:#f0e9d6; --muted:#ab9f87; --border:#2b3b34; --soft:#1c332b; --shadow:0 12px 32px rgba(0,0,0,.4); }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Amiri",serif;background:var(--bg);color:var(--ink);line-height:2.05;transition:.3s;
+ background-image:radial-gradient(circle at 12% 8%, rgba(212,175,55,.12), transparent 32%),radial-gradient(circle at 88% 12%, rgba(14,94,74,.1), transparent 32%);}
+h1,h2,h3,h4,.top-title,.btn,.toc a,.quiz-link{font-family:"Tajawal",sans-serif}
+.topbar{position:sticky;top:0;z-index:60;backdrop-filter:blur(12px);background:color-mix(in srgb, var(--bg2) 90%, transparent);border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:1150px;margin:auto;padding:10px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--green),var(--green2));display:grid;place-items:center;color:#fff;font-size:24px;border:1px solid rgba(212,175,55,.55);box-shadow:var(--shadow)}
+.top-title b{display:block;font-size:18px;line-height:1.3}
+.top-title small{color:var(--muted);font-size:13px;font-family:Amiri,serif}
+.actions{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.2s}
+.btn:hover{border-color:var(--gold2);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,#0e5e4a,#1a8a6b);color:#fff;border:none}
+.btn-gold{background:linear-gradient(135deg,#b8860b,#d4af37);color:#fff;border:none}
+.hero{max-width:1150px;margin:24px auto 8px;padding:0 18px;display:grid;grid-template-columns:1.25fr .75fr;gap:16px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.hero-main{background:linear-gradient(135deg,#0c4f3e,#147a60 70%,#1d9a78);color:#fdf8e7;border-radius:26px;padding:38px 30px;position:relative;overflow:hidden;border:1px solid rgba(212,175,55,.45);box-shadow:var(--shadow)}
+.hero-main::before{content:"";position:absolute;inset:0;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg width='140' height='140' viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M70 12 L80 45 L115 45 L87 65 L97 100 L70 80 L43 100 L53 65 L25 45 L60 45 Z' fill='none' stroke='%23FFD700' stroke-width='1.2'/%3E%3C/svg%3E");background-size:100px}
+.hero-main h1{margin:0;font-size:clamp(28px,4.5vw,44px);line-height:1.5;position:relative}
+.hero-main p{margin:12px 0 0;font-size:20px;opacity:.95;position:relative;font-family:Amiri,serif}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;position:relative}
+.badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:4px 14px;font-size:14px}
+.hero-side{background:var(--card);border:1px solid var(--border);border-radius:26px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.hero-side h3{margin:0;font-size:17px;color:var(--green)}
+.hero-side p{margin:0;font-size:16.5px;color:var(--ink);line-height:1.95}
+.quiz-cta{background:linear-gradient(135deg,#fff8e2,#fef3c7);border:1.5px dashed var(--gold2);border-radius:16px;padding:14px;text-align:center}
+[data-theme="dark"] .quiz-cta{background:#231f0e}
+.quiz-cta a{font-weight:800;color:var(--green);font-size:17px}
+.layout{max-width:1150px;margin:14px auto 60px;padding:0 18px;display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start}
+@media(max-width:960px){.layout{grid-template-columns:1fr}}
+.toc{position:sticky;top:78px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:var(--shadow);max-height:calc(100vh - 100px);overflow:auto}
+.toc h4{margin:0 0 10px;font-size:16px;color:var(--green)}
+.toc a{display:block;text-decoration:none;color:var(--ink);font-size:14.5px;padding:7px 10px;border-radius:10px;line-height:1.7}
+.toc a:hover,.toc a.active{background:var(--soft);color:var(--green)}
+.content{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 6px;font-size:23px;color:var(--green);display:flex;align-items:center;gap:10px}
+.card h2 .num{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;font-size:17px;flex-shrink:0}
+.card h3{color:#8a6d1a;font-size:19px;margin:20px 0 8px;border-right:4px solid var(--gold2);padding-right:10px}
+[data-theme="dark"] .card h3{color:var(--gold2)}
+.card p, .card li{font-size:var(--font-size)}
+.aya{background:var(--soft);border:1px solid var(--border);border-radius:14px;padding:12px 16px;font-size:19px;text-align:center;margin:12px 0}
+.hadith{background:linear-gradient(to bottom, color-mix(in srgb, var(--soft) 70%, transparent), transparent);border:1px dashed var(--gold2);border-radius:14px;padding:12px 16px;margin:12px 0;font-size:18px}
+.hadith strong{color:var(--green)}
+.madhhab-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+@media(max-width:760px){.madhhab-grid{grid-template-columns:1fr 1fr}}
+.madhhab{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center}
+.madhhab b{display:block;font-family:Tajawal;font-size:15px;color:var(--green)}
+.madhhab span{font-size:16px;line-height:1.8}
+table.compare{width:100%;border-collapse:collapse;font-size:16.5px;margin-top:12px;font-family:Amiri,serif}
+table.compare th{background:#0e5e4a;color:#fff;padding:10px 8px;font-family:Tajawal;font-size:15px}
+table.compare td, table.compare th{border:1px solid #c9bfa6;padding:9px 8px;text-align:center}
+table.compare tr:nth-child(even) td{background:color-mix(in srgb, var(--soft) 60%, transparent)}
+.table-wrap{overflow-x:auto}
+.note{background:#fff8e2;border-right:4px solid var(--gold);border-radius:10px;padding:10px 14px;font-size:17px;margin:12px 0}
+[data-theme="dark"] .note{background:#26200d}
+.refs ol{margin:0;padding-right:20px;font-size:17.5px}
+.refs li{margin-bottom:8px}
+.toc-head{display:flex;align-items:center;gap:8px}
+.toc-head h4{margin:0;flex:1}
+.toc-hide{border:1px solid var(--border);background:var(--bg2);color:var(--ink);border-radius:999px;padding:2px 12px;cursor:pointer;font-family:Tajawal;font-size:13px;font-weight:700}
+.layout.no-toc{grid-template-columns:1fr}
+.layout.no-toc .toc{display:none}
+.readbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+footer{text-align:center;color:var(--muted);padding:26px;font-size:15px;font-family:Tajawal}
+.fab-quiz{position:fixed;bottom:20px;left:20px;z-index:70}
+/* نافذة ملف PDF الداخلية */
+.pdf-modal{position:fixed;inset:0;z-index:100;display:none}
+.pdf-modal.open{display:block}
+.pdf-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.pdf-box{position:absolute;inset:3vh 4vw;background:var(--bg2);border:1px solid var(--border);border-radius:20px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.35)}
+.pdf-toolbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--card)}
+.pdf-toolbar b{font-family:Tajawal;font-size:16px;flex:1}
+.pdf-body{flex:1;overflow:auto;padding:22px;background:var(--bg)}
+.pdf-body iframe{width:100%;height:100%;min-height:70vh;border:1px solid var(--border);border-radius:12px;background:#fff}
+.pdf-doc{background:#fff;color:#222;border-radius:8px;max-width:800px;margin:auto;padding:34px 30px;box-shadow:0 6px 24px rgba(0,0,0,.12);line-height:2}
+.pdf-doc h2{text-align:center;font-family:Tajawal}
+/* نافذة إشعار التثبيت كتطبيق */
+.install-pop{position:fixed;bottom:16px;right:16px;left:16px;z-index:90;max-width:540px;margin-inline:auto;background:var(--card);border:1.5px solid var(--gold2);border-radius:18px;box-shadow:var(--shadow);padding:12px 14px;display:flex;gap:12px;align-items:center}
+.install-pop[hidden]{display:none!important}
+.install-pop img{border-radius:12px;flex-shrink:0}
+.install-pop-text{flex:1;line-height:1.7;min-width:0}
+.install-pop-text b{font-family:Tajawal,sans-serif;font-size:15px;display:block}
+.install-pop-text small{color:var(--muted);font-size:13px}
+.install-pop-actions{display:flex;gap:6px;flex-shrink:0}
+.install-pop-x{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px;align-self:flex-start}
+.install-pop:not([hidden]) ~ .fab-quiz{display:none}
+@media(max-width:560px){.install-pop{flex-wrap:wrap}.install-pop-actions{width:100%}.install-pop-actions .btn{flex:1;justify-content:center}}
+@media print{ .topbar,.toc,.fab-quiz,.no-print,.pdf-modal,.install-pop{display:none!important} body{background:#fff} .layout{grid-template-columns:1fr!important} .layout .toc{display:none!important} .card{box-shadow:none;break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">🕌</div>
+      <div class="top-title"><b>صفة الصلاة في المذاهب الأربعة</b><small>دراسة فقهية مقارنة في ضوء الأدلة الشرعية</small></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-gold" id="pdfBtn" title="عرض ملف البحث PDF داخل الموقع">📄 ملف PDF</button>
+      <button class="btn" id="tocBtn" title="إخفاء / إظهار فهرس البحث">📑 إخفاء الفهرس</button>
+      <a class="btn btn-primary" href="quiz.html">📝 اختبر نفسك</a>
+      <button class="btn" id="fontPlus">أ+</button>
+      <button class="btn" id="fontMinus">أ−</button>
+      <button class="btn" id="themeBtn">🌙</button>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-main">
+    <h1>صفة الصلاة في المذاهب الفقهية الأربعة</h1>
+    <p>دراسة فقهية مقارنة في ضوء الأدلة الشرعية — من شروط الصلاة إلى التسليم</p>
+    <div class="hero-badges">
+      <span class="badge">🕌 الحنفية • المالكية • الشافعية • الحنابلة</span>
+      <span class="badge">📖 المحور: بداية المجتهد لابن رشد</span>
+      <span class="badge">💬 قال ﷺ: «صلوا كما رأيتموني أصلي» — البخاري 631</span>
+    </div>
+  </div>
+  <div class="hero-side">
+    <h3>📋 عن هذا الموقع</h3>
+    <p>عرض مرتب وميسّر لبحث <b>«صفة الصلاة في المذاهب الأربعة»</b>: الملخص، الشروط، التكبير، القراءة، الركوع والسجود، التشهد والتسليم، جدول الخلاف، أسبابه، والخاتمة — بصياغة سهلة القراءة مع الأدلة.</p>
+    <div class="quiz-cta no-print">🎯 أكمل القراءة ثم انتقل إلى صفحة مستقلة: <br><a href="quiz.html">← الدخول إلى صفحة الأسئلة (اختيار متعدد مع الدليل) →</a></div>
+    <p style="font-size:14px;color:var(--muted)">💡 زر <b>«ملف PDF»</b> بالأعلى يعرض نص البحث الآن <b>داخل الموقع مباشرة</b> في نافذة قراءة (دون الخروج إلى أي صفحة أخرى)، ويمكنك من هناك الطباعة أو الحفظ PDF.</p>
+  </div>
+</div>
+
+<div class="layout" id="layout">
+  <nav class="toc no-print" id="toc">
+    <div class="toc-head"><h4>📑 فهرس البحث</h4><button class="toc-hide" id="tocHide" title="إخفاء الفهرس لتوسيع القراءة">إخفاء ✕</button></div>
+    <a href="#summary">ملخص البحث</a>
+    <a href="#intro">المقدمة</a>
+    <a href="#method">منهج البحث وحدوده</a>
+    <a href="#s1">أولًا: شروط الصلاة ومقدماتها</a>
+    <a href="#s2">ثانيًا: تكبيرة الإحرام ورفع اليدين</a>
+    <a href="#s3">ثالثًا: الاستفتاح والبسملة والقراءة</a>
+    <a href="#s4">رابعًا: الركوع والاعتدال والسجود</a>
+    <a href="#s5">خامسًا: التشهد والجلوس والصلاة على النبي</a>
+    <a href="#s6">سادسًا: التسليم والخروج من الصلاة</a>
+    <a href="#s7">سابعًا: جدول أبرز مواضع الخلاف</a>
+    <a href="#s8">ثامنًا: أسباب اختلاف الفقهاء</a>
+    <a href="#end">الخاتمة</a>
+    <a href="#refs">المصادر والمراجع</a>
+  </nav>
+
+  <main class="content">
+    <section class="card" id="summary">
+      <h2><span class="num">★</span> ملخص البحث</h2>
+      <p>يتناول هذا البحث أبرز مسائل <b>صفة الصلاة عند الحنفية والمالكية والشافعية والحنابلة</b>، بدءًا من شروط الصلاة والنية وتكبيرة الإحرام، مرورًا بالقراءة والركوع والرفع منه والسجود والجلوس والتشهد، وانتهاءً بالتسليم.</p>
+      <p>يعتمد البحث <b>منهج المقارنة الفقهية</b>، مع جعل <b>«بداية المجتهد ونهاية المقتصد» لابن رشد</b> محورًا لفهم أسباب اختلاف الفقهاء، والاستئناس بأحاديث الصحيحين وسائر كتب السنة وبالمصادر المعتمدة في المذاهب. والمقصود عرض <b>المسائل المشهورة وأصول الاستدلال</b>، لا استقصاء كل رواية أو وجه داخل كل مذهب.</p>
+    </section>
+
+    <section class="card" id="intro">
+      <h2><span class="num">١</span> المقدمة</h2>
+      <p>الصلاة أعظم أركان الإسلام العملية بعد الشهادتين، وقد جاءت السنة النبوية ببيان هيئتها وأقوالها وأفعالها.</p>
+      <div class="hadith">💬 قال النبي ﷺ: <strong>«صلوا كما رأيتموني أصلي»</strong> (صحيح البخاري، كتاب الأذان، باب الأذان للمسافر، حديث 631).</div>
+      <p>نقل الفقهاء صفة الصلاة ودرسوا أدلتها، ثم اختلفوا في بعض جزئياتها بسبب اختلافهم في <b>ثبوت النصوص أو دلالتها</b>، أو في <b>الجمع بين الروايات</b>، أو في <b>فهم العمل المنقول</b>.</p>
+      <div class="note">📌 أهمية الدراسة: تدريب الطالب على قراءة الخلاف قراءة علمية، والتمييز بين أصل متفق عليه وهيئات وقع فيها الخلاف، وفهم أن الخلاف المعتبر لا يعني التناقض في أصول العبادة. ويُعد كتاب ابن رشد «بداية المجتهد» مصدرًا مناسبًا لأنه يبين <b>أسباب الاختلاف وأصوله</b> لا مجرد الأقوال.</div>
+    </section>
+
+    <section class="card" id="method">
+      <h2><span class="num">٢</span> منهج البحث وحدوده</h2>
+      <p>يسير البحث على <b>المنهج الوصفي المقارن</b>: عرض المسألة ← ذكر أشهر أقوال المذاهب الأربعة ← الإشارة إلى الدليل أو وجه الاستدلال، مع التنبيه إلى أن بعض المسائل لها <b>تفصيلات وروايات داخل المذهب الواحد</b>.</p>
+    </section>
+
+    <section class="card" id="s1">
+      <h2><span class="num">٣</span> أولًا: شروط الصلاة ومقدماتها</h2>
+      <h3>1. الطهارة وستر العورة واستقبال القبلة ودخول الوقت</h3>
+      <p>اتفق الفقهاء في الجملة على اشتراط: <b>الطهارة من الحدث والخبث، وستر العورة، واستقبال القبلة للقادر، ودخول الوقت</b> لصحة الفريضة، مع تفصيلات معروفة في الأعذار والاستثناءات.</p>
+      <div class="aya">﴿ يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا قُمْتُمْ إِلَى الصَّلَاةِ فَاغْسِلُوا وُجُوهَكُمْ وَأَيْدِيَكُمْ إِلَى الْمَرَافِقِ ﴾ [المائدة: 6]</div>
+      <div class="aya">﴿ فَوَلِّ وَجْهَكَ شَطْرَ الْمَسْجِدِ الْحَرَامِ ﴾ [البقرة: 144]</div>
+      <p>وتفاصيل الأعذار كالعجز عن الاستقبال أو فقد الماء تُبحث في أبوابها.</p>
+      <h3>2. النية</h3>
+      <p><b>النية شرط لصحة الصلاة عند المذاهب الأربعة</b>، ومحلها <b>القلب</b>، ولا يتوقف أصلها على التلفظ بها.</p>
+      <div class="hadith">💬 وأصلها حديث عمر رضي الله عنه: <strong>«إنما الأعمال بالنيات»</strong> (متفق عليه: صحيح البخاري وصحيح مسلم).</div>
+      <div class="note">أما التلفظ بالنية فله تفصيل في كلام الفقهاء، ولا يصح جعل صورة واحدة منه شرطًا متفقًا عليه.</div>
+    </section>
+
+    <section class="card" id="s2">
+      <h2><span class="num">٤</span> ثانيًا: تكبيرة الإحرام ورفع اليدين ووضعهما</h2>
+      <h3>1. تكبيرة الإحرام</h3>
+      <p><b>تكبيرة الإحرام ركن لا تنعقد الصلاة بدونها عند جمهور الفقهاء</b>، واللفظ المشهور لها هو <b>«الله أكبر»</b>.</p>
+      <div class="hadith">💬 ويُستدل لذلك بحديث: <strong>«مفتاح الصلاة الطهور، وتحريمها التكبير، وتحليلها التسليم»</strong> رواه أبو داود والترمذي وابن ماجه بألفاظ متقاربة.</div>
+      <h3>2. رفع اليدين عند التكبير</h3>
+      <div class="hadith">💬 ثبت في الصحيحين عن ابن عمر رضي الله عنهما أن النبي ﷺ <strong>كان يرفع يديه حذو منكبيه عند افتتاح الصلاة، وعند التكبير للركوع، وعند الرفع منه</strong>. وجاءت روايات في الرفع عند القيام من التشهد الأول.</div>
+      <div class="madhhab-grid">
+        <div class="madhhab"><b>الحنفية</b><span>المشهور: عند تكبيرة الإحرام فقط</span></div>
+        <div class="madhhab"><b>المالكية</b><span>المشهور: عند الافتتاح فقط</span></div>
+        <div class="madhhab"><b>الشافعية</b><span>يُستحب في المواضع الواردة: الافتتاح والركوع والرفع منه وغيرها</span></div>
+        <div class="madhhab"><b>الحنابلة</b><span>قريب من الشافعية في مواضع الرفع</span></div>
+      </div>
+      <p>وسبب الخلاف: اختلافهم في <b>اعتماد الروايات وتفسير العمل المنقول</b>، لا إنكار أصل ثبوت الرفع عند الافتتاح.</p>
+      <h3>3. وضع اليمنى على اليسرى</h3>
+      <div class="hadith">💬 وردت أحاديث وآثار، منها حديث سهل بن سعد في صحيح البخاري: <strong>«كان الناس يُؤمرون أن يضع الرجل اليد اليمنى على ذراعه اليسرى في الصلاة»</strong>.</div>
+      <p>يُستحب ذلك عند <b>الحنفية والشافعية والحنابلة في الجملة</b> مع اختلاف في موضع الوضع. والمشهور عند <b>المالكية في الفريضة إرسال اليدين</b>، مع ذكر القبض في النافلة عند طائفة من المالكية — فيُنسب هذا إلى <b>المشهور لا إلى جميع روايات المذهب</b>.</p>
+    </section>
+
+    <section class="card" id="s3">
+      <h2><span class="num">٥</span> ثالثًا: الاستفتاح والاستعاذة والبسملة والقراءة</h2>
+      <h3>1. دعاء الاستفتاح والاستعاذة</h3>
+      <p>ثبتت أدعية متعددة للاستفتاح، منها: <b>«سبحانك اللهم وبحمدك، وتبارك اسمك، وتعالى جدك، ولا إله غيرك»</b>، ومنها دعاء <b>«اللهم باعد بيني وبين خطاياي...»</b> في الصحيحين. يُستحب الاستفتاح عند <b>جمهور الفقهاء</b> مع اختلافهم في الصيغة وموضعها. وتُشرع الاستعاذة قبل القراءة مع اختلاف في حكمها وتكرارها.</p>
+      <h3>2. البسملة</h3>
+      <div class="madhhab-grid">
+        <div class="madhhab"><b>الشافعية</b><span>آية من الفاتحة، تُقرأ ويُجهر بها في مواضع الجهر</span></div>
+        <div class="madhhab"><b>الحنفية</b><span>يقرؤونها سرًّا</span></div>
+        <div class="madhhab"><b>المالكية</b><span>المشهور: تركها في الفريضة قبل الفاتحة</span></div>
+        <div class="madhhab"><b>الحنابلة</b><span>يقرؤونها سرًّا في الجملة</span></div>
+      </div>
+      <p>ويرتبط الخلاف باختلاف الأدلة وطرق الجمع بين الروايات في إثبات الجهر أو الإسرار.</p>
+      <h3>3. قراءة الفاتحة وحكم قراءة المأموم</h3>
+      <div class="hadith">💬 قراءة الفاتحة من أعظم أركان القراءة، ويُستدل لها بحديث عبادة بن الصامت رضي الله عنه: <strong>«لا صلاة لمن لم يقرأ بفاتحة الكتاب»</strong> (صحيح البخاري وصحيح مسلم).</div>
+      <p>لكن اختلفوا في وجوبها على المأموم: فالشافعية يوجبونها على المأموم في الجملة، والحنفية لا يوجبون قراءة المأموم خلف الإمام، وللمالكية والحنابلة تفصيل بين الجهر والسر والإدراك — مع الجمع بين أحاديث الفاتحة وأحاديث الإنصات للإمام.</p>
+      <h3>4. السورة بعد الفاتحة والجهر والإسرار</h3>
+      <p>تُسن قراءة شيء من القرآن بعد الفاتحة في <b>الركعتين الأوليين</b> من الفريضة في الجملة. والجهر في <b>الفجر وأوليي المغرب والعشاء</b>، والإسرار في <b>الظهر والعصر</b> من الهيئات المعروفة المستندة إلى النقل العملي المتواتر معنى.</p>
+    </section>
+
+    <section class="card" id="s4">
+      <h2><span class="num">٦</span> رابعًا: الركوع والاعتدال والسجود والجلوس بين السجدتين</h2>
+      <h3>1. الركوع والطمأنينة</h3>
+      <p>من صفة الركوع أن ينحني المصلي حتى يتمكن، ويضع يديه على ركبتيه، ويطمئن، ويقول: <b>«سبحان ربي العظيم»</b>.</p>
+      <div class="hadith">💬 ويُستدل لأصل الطمأنينة بحديث <strong>المسيء صلاته</strong>، إذ أمره النبي ﷺ أن يركع حتى يطمئن راكعًا ثم يرفع حتى يعتدل قائمًا. والطمأنينة <strong>ركن عند جمهور الفقهاء</strong>.</div>
+      <h3>2. الرفع من الركوع</h3>
+      <p>يقول عند الرفع <b>«سمع الله لمن حمده»</b>، وبعد الاعتدال <b>«ربنا ولك الحمد»</b> أو ما ورد من الصيغ، مع اختلاف في بعض الأحكام بحسب كونه إمامًا أو مأمومًا أو منفردًا (حديث أبي هريرة وغيره في الصحيحين).</p>
+      <h3>3. السجود على الأعضاء السبعة</h3>
+      <div class="hadith">💬 قال ﷺ: <strong>«أُمرت أن أسجد على سبعة أعظم: على الجبهة — وأشار بيده إلى أنفه — واليدين والركبتين وأطراف القدمين»</strong> (صحيح البخاري وصحيح مسلم). ويقول في سجوده «سبحان ربي الأعلى» وما صح من الدعاء.</div>
+      <h3>4. الجلوس بين السجدتين</h3>
+      <p>يجلس بعد السجدة الأولى مطمئنًا ثم يسجد الثانية، ومن الأدعية: <b>«رب اغفر لي، رب اغفر لي»</b>. وأصل الجلوس والطمأنينة معتبر، ويُستدل له بحديث المسيء صلاته.</p>
+    </section>
+
+    <section class="card" id="s5">
+      <h2><span class="num">٧</span> خامسًا: التشهد والجلوس والصلاة على النبي ﷺ</h2>
+      <h3>1. التشهد</h3>
+      <div class="hadith">💬 أشهرها تشهد ابن مسعود رضي الله عنه: <strong>«التحيات لله والصلوات والطيبات، السلام عليك أيها النبي ورحمة الله وبركاته، السلام علينا وعلى عباد الله الصالحين، أشهد أن لا إله إلا الله وأشهد أن محمدًا عبده ورسوله»</strong> (البخاري ومسلم بألفاظ متقاربة).</div>
+      <p>التشهد الأخير <b>واجب أو ركن بحسب اصطلاح المذهب</b> — فلا بد من مراعاة اصطلاح كل مدرسة عند المقارنة.</p>
+      <h3>2. هيئة الجلوس والإشارة بالسبابة</h3>
+      <p>ورد <b>الافتراش والتورك</b> في أحاديث صفة الصلاة، مع اختلافهم في مواضع كل هيئة. كما وردت أحاديث الإشارة بالسبابة عند التشهد مع اختلاف في صفتها — فلا تُصور على أنها محل اتفاق.</p>
+      <h3>3. الصلاة الإبراهيمية والدعاء قبل السلام</h3>
+      <div class="hadith">💬 وردت الصلاة على النبي ﷺ في التشهد الأخير (الصيغة الإبراهيمية في الصحيحين)، ويُستحب الدعاء قبل السلام، ومنه: <strong>الاستعاذة من عذاب جهنم وعذاب القبر وفتنة المحيا والممات وفتنة المسيح الدجال</strong> (صحيح مسلم).</div>
+    </section>
+
+    <section class="card" id="s6">
+      <h2><span class="num">٨</span> سادسًا: التسليم والخروج من الصلاة</h2>
+      <div class="hadith">💬 ثبت أن النبي ﷺ كان يُسلّم في الصلاة، وجاءت أحاديث في <strong>التسليمتين</strong>، ويُستدل للخروج بها بحديث: <strong>«وتحليلها التسليم»</strong>.</div>
+      <p>يفرّق الفقهاء بين <b>أصل الخروج من الصلاة</b> وبين <b>استحباب التسليمة الثانية أو وجوبها</b> بحسب المذهب.</p>
+    </section>
+
+    <section class="card" id="s7">
+      <h2><span class="num">٩</span> سابعًا: جدول إجمالي لأبرز مواضع الخلاف</h2>
+      <div class="table-wrap">
+      <table class="compare">
+        <tr><th>المسألة</th><th>الحنفية</th><th>المالكية</th><th>الشافعية</th><th>الحنابلة</th></tr>
+        <tr><td><b>رفع اليدين</b></td><td>المشهور: عند تكبيرة الإحرام</td><td>المشهور: عند الافتتاح</td><td>عند الافتتاح والركوع والرفع منه وفي مواضع أخرى وردت بها السنة</td><td>قريب من الشافعية في مواضع الرفع</td></tr>
+        <tr><td><b>وضع اليمنى على اليسرى</b></td><td>سنة في الجملة</td><td>المشهور في الفريضة: الإرسال مع تفصيل</td><td>سنة في الجملة</td><td>سنة في الجملة</td></tr>
+        <tr><td><b>البسملة قبل الفاتحة</b></td><td>سرًّا</td><td>المشهور: تركها في الفريضة</td><td>آية من الفاتحة وتُقرأ جهرًا في مواضعه</td><td>سرًّا في الجملة</td></tr>
+        <tr><td><b>قراءة المأموم للفاتحة</b></td><td>لا يقرأ خلف الإمام في المشهور</td><td>تفصيل بين الجهر والسر</td><td>يقرأ الفاتحة في الجملة</td><td>تفصيل بين الجهر والسر</td></tr>
+        <tr><td><b>التشهد الأخير</b></td><td>واجب عندهم مع تفصيل الأركان والواجبات</td><td>فرض / ركن في الجملة</td><td>ركن</td><td>ركن</td></tr>
+        <tr><td><b>التسليم</b></td><td>له تفصيل في الفرض والواجب وصفته</td><td>فرض في الجملة مع تفصيل</td><td>ركن في الجملة</td><td>ركن في الجملة</td></tr>
+      </table>
+      </div>
+      <div class="note">⚠️ تنبيه منهجي: الجدول موجز للتقريب وليس بديلًا عن تحرير المعتمد في كل مذهب؛ فالعبارات تتغير بحسب اصطلاح الفرض والركن والواجب والسنة، كما توجد روايات وتفصيلات داخل المذهب الواحد.</div>
+    </section>
+
+    <section class="card" id="s8">
+      <h2><span class="num">١٠</span> ثامنًا: أسباب اختلاف الفقهاء في صفة الصلاة</h2>
+      <ol>
+        <li>اختلافهم في <b>ثبوت بعض الأحاديث أو قوة دلالتها</b>.</li>
+        <li>اختلافهم في <b>الجمع بين الروايات</b> (كالجهر بالبسملة والإسرار بها).</li>
+        <li>اختلاف <b>فهم الأمر النبوي</b>: هل يدل على الوجوب أم الاستحباب؟</li>
+        <li>اختلافهم في <b>اعتبار عمل أهل المدينة أو بعض الآثار</b> وطرق نقل الصفة العملية.</li>
+        <li>اختلافهم في <b>تحديد ما هو ركن أو واجب أو سنة</b>، وما يترتب على تركه سهوًا أو عمدًا.</li>
+      </ol>
+      <p>وهذه من القضايا التي يعتني ابن رشد بتحليلها في «بداية المجتهد».</p>
+    </section>
+
+    <section class="card" id="end">
+      <h2><span class="num">✦</span> الخاتمة</h2>
+      <p>يتبين من المقارنة أن صفة الصلاة تجمع بين <b>أركان وهيئات ثابتة</b> وبين <b>مسائل اجتهادية وقع فيها خلاف معتبر</b>. ومن أهم ما ينبغي للطالب: <b>تقديم النصوص الصحيحة، وفهمها في ضوء مجموع الروايات، ونسبة الأقوال بدقة، وعدم التسوية بين الركن والسنة</b>، وعدم عرض القول المشهور على أنه لا خلاف فيه. ودراسة ابن رشد نافعة في الانتقال من مجرد حكاية الخلاف إلى <b>فهم أسبابه وأصوله</b>.</p>
+      <div class="quiz-cta no-print">📝 جاهز لاختبار فهمك؟ <a href="quiz.html">← ابدأ الأسئلة الآن (مع الدليل من الملف) →</a></div>
+    </section>
+
+    <section class="card refs" id="refs">
+      <h2><span class="num">📚</span> المصادر والمراجع الأولية</h2>
+      <ol>
+        <li>القرآن الكريم.</li>
+        <li>البخاري، محمد بن إسماعيل، الجامع الصحيح (صحيح البخاري)، أبواب صفة الصلاة والأذان والسجود والتشهد.</li>
+        <li>مسلم بن الحجاج، الصحيح (صحيح مسلم)، كتاب الصلاة.</li>
+        <li>أبو داود، سليمان بن الأشعث، السنن، كتاب الصلاة.</li>
+        <li>الترمذي، محمد بن عيسى، الجامع، أبواب الصلاة.</li>
+        <li>ابن رشد، محمد بن أحمد، بداية المجتهد ونهاية المقتصد، كتاب الصلاة. نسخة الجامع الرقمية: https://aljam3.com/ar/10045/24344/200 وما يليها.</li>
+        <li>السرخسي، محمد بن أحمد، المبسوط، كتاب الصلاة.</li>
+        <li>الكاساني، علاء الدين، بدائع الصنائع في ترتيب الشرائع، كتاب الصلاة.</li>
+        <li>سحنون، المدونة، كتاب الصلاة.</li>
+        <li>النووي، يحيى بن شرف، المجموع شرح المهذب، كتاب الصلاة.</li>
+        <li>ابن قدامة، عبد الله بن أحمد، المغني، كتاب الصلاة.</li>
+      </ol>
+    </section>
+  </main>
+</div>
+
+<!-- نافذة عرض ملف PDF داخل الموقع -->
+<div class="pdf-modal" id="pdfModal" role="dialog" aria-modal="true" aria-label="عرض ملف البحث">
+  <div class="pdf-backdrop" id="pdfBackdrop"></div>
+  <div class="pdf-box">
+    <div class="pdf-toolbar">
+      <b>📄 ملف البحث: صفة الصلاة في المذاهب الأربعة</b>
+      <button class="btn" id="pdfPrint">🖨️ طباعة / حفظ PDF</button>
+      <button class="btn btn-gold" id="pdfClose">إغلاق ✕</button>
+    </div>
+    <div class="pdf-body">
+      <iframe id="pdfFrame" title="ملف البحث PDF" style="display:none"></iframe>
+      <div class="pdf-doc" id="pdfDoc">
+        <h2>صفة الصلاة في المذاهب الفقهية الأربعة</h2>
+        <p style="text-align:center">دراسة فقهية مقارنة في ضوء الأدلة الشرعية</p>
+        <hr>
+        <p><b>ملخص البحث:</b> يتناول هذا البحث أبرز مسائل صفة الصلاة عند الحنفية والمالكية والشافعية والحنابلة، بدءًا من شروط الصلاة والنية وتكبيرة الإحرام، مرورًا بالقراءة والركوع والرفع منه والسجود والجلوس والتشهد، وانتهاءً بالتسليم. ويعتمد منهج المقارنة الفقهية مع جعل «بداية المجتهد ونهاية المقتصد» لابن رشد محورًا لفهم أسباب اختلاف الفقهاء.</p>
+        <p><b>المقدمة:</b> الصلاة أعظم أركان الإسلام العملية بعد الشهادتين. قال ﷺ: «صلوا كما رأيتموني أصلي» (البخاري 631). اختلف الفقهاء في بعض جزئياتها بسبب اختلافهم في ثبوت النصوص أو دلالتها، أو الجمع بين الروايات، أو فهم العمل المنقول.</p>
+        <p><b>أولًا — الشروط:</b> الطهارة وستر العورة واستقبال القبلة ودخول الوقت، والنية شرط لصحة الصلاة عند المذاهب الأربعة (حديث: إنما الأعمال بالنيات).</p>
+        <p><b>ثانيًا — تكبيرة الإحرام:</b> ركن عند الجمهور («مفتاح الصلاة الطهور، وتحريمها التكبير، وتحليلها التسليم») ولفظها «الله أكبر». رفع اليدين ثابت عند الافتتاح (حديث ابن عمر في الصحيحين)؛ والمشهور عند الحنفية والمالكية الاقتصار على الافتتاح، ويستحب الشافعية والحنابلة الرفع في المواضع الواردة. ووضع اليمنى على اليسرى سنة عند الجمهور، والمشهور عند المالكية الإرسال في الفريضة.</p>
+        <p><b>ثالثًا — القراءة:</b> الاستفتاح مستحب عند الجمهور. البسملة: الشافعية آية من الفاتحة يُجهر بها، والحنفية والحنابلة سرًّا، والمالكية المشهور تركها في الفريضة. الفاتحة ركن («لا صلاة لمن لم يقرأ بفاتحة الكتاب»)؛ والحنفية لا يوجبونها على المأموم، وللشافعية والمالكية والحنابلة تفصيل.</p>
+        <p><b>رابعًا — الركوع والسجود:</b> الطمأنينة ركن عند الجمهور (حديث المسيء صلاته). السجود على سبعة أعظم (الحديث في الصحيحين). الجلوس بين السجدتين معتبر («رب اغفر لي»).</p>
+        <p><b>خامسًا — التشهد:</b> أشهره تشهد ابن مسعود في الصحيحين؛ والأخير ركن عند الشافعية والحنابلة في الجملة. والصلاة الإبراهيمية والدعاء قبل السلام مستحبان (حديث الاستعاذة في مسلم).</p>
+        <p><b>سادسًا — التسليم:</b> مخرج من الصلاة («وتحليلها التسليم») وجاءت أحاديث في التسليمتين.</p>
+        <p><b>سابعًا وثامنًا:</b> راجع جدول الخلاف وأسباب الاختلاف (ثبوت الأحاديث، الجمع بين الروايات، فهم الأمر، عمل أهل المدينة، تحديد الركن والواجب والسنة) في الصفحة الرئيسة.</p>
+        <p style="font-size:14px;color:#666">📌 هذه نسخة العرض الداخلي لنص البحث. النص الكامل المفصّل مع الجداول والمصادر موجود في أقسام الصفحة الرئيسة، ويمكن حفظ هذه النافذة PDF بزر الطباعة أعلاه.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- إشعار التثبيت كتطبيق -->
+<div class="install-pop no-print" id="installPop" hidden>
+  <img src="icons/icon-192.png" alt="أيقونة التطبيق" width="52" height="52">
+  <div class="install-pop-text"><b>📲 ثبّت الموقع كتطبيق على هاتفك</b><small id="installPopHint">يعمل دون اتصال — سريع وخفيف</small></div>
+  <div class="install-pop-actions">
+    <button class="btn btn-gold" id="installBtn">تثبيت</button>
+    <button class="btn" id="installLater">لاحقًا</button>
+  </div>
+  <button class="install-pop-x" id="installX" title="إغلاق">✕</button>
+</div>
+
+<div class="fab-quiz no-print"><a class="btn btn-primary" href="quiz.html" style="padding:12px 22px;font-size:16px;box-shadow:var(--shadow)">📝 اختبر نفسك</a></div>
+<footer>إعداد تعليمي من بحث «صفة الصلاة في المذاهب الأربعة» — جميع الأحكام مختصرة من الملف، وللتفصيل راجع المصادر • صُمم للقراءة المريحة 🤍</footer>
+
+<script>
+// زر PDF الداخلي: عرض داخل الموقع فقط — بلا أي إحالة خارجية
+const pdfModal=document.getElementById('pdfModal'),pdfFrame=document.getElementById('pdfFrame'),pdfDoc=document.getElementById('pdfDoc');
+document.getElementById('pdfBtn').addEventListener('click', async ()=>{
+  pdfModal.classList.add('open');document.body.style.overflow='hidden';
+  try{
+    const r=await fetch('research.pdf',{method:'HEAD'});
+    if(r.ok){pdfFrame.style.display='block';pdfDoc.style.display='none';pdfFrame.src='research.pdf';}
+    else{pdfFrame.style.display='none';pdfDoc.style.display='block';}
+  }catch(e){pdfFrame.style.display='none';pdfDoc.style.display='block';}
+});
+function closePdf(){pdfModal.classList.remove('open');document.body.style.overflow='';}
+document.getElementById('pdfClose').onclick=closePdf;
+document.getElementById('pdfBackdrop').onclick=closePdf;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePdf();});
+document.getElementById('pdfPrint').onclick=()=>window.print();
+// زر إخفاء / إظهار فهرس البحث لتوسيع القراءة
+const layout=document.getElementById('layout'),tocBtn=document.getElementById('tocBtn'),tocHide=document.getElementById('tocHide');
+let tocHidden=localStorage.getItem('salat-toc')==='hidden';
+function applyToc(){layout.classList.toggle('no-toc',tocHidden);tocBtn.textContent=tocHidden?'📑 إظهار الفهرس':'📑 إخفاء الفهرس';}
+tocBtn.onclick=()=>{tocHidden=!tocHidden;localStorage.setItem('salat-toc',tocHidden?'hidden':'shown');applyToc();};
+tocHide.onclick=()=>{tocHidden=true;localStorage.setItem('salat-toc','hidden');applyToc();};
+applyToc();
+// الثيم والخط
+let theme = localStorage.getItem('salat-theme') || 'light';
+let fsize = +(localStorage.getItem('salat-font') || 19);
+function apply(){ document.documentElement.dataset.theme = theme;
+  document.documentElement.style.setProperty('--font-size', fsize+'px');
+  document.getElementById('themeBtn').textContent = theme==='dark' ? '☀️' : '🌙'; }
+document.getElementById('themeBtn').onclick = ()=>{ theme = theme==='dark'?'light':'dark'; localStorage.setItem('salat-theme',theme); apply(); };
+document.getElementById('fontPlus').onclick = ()=>{ fsize=Math.min(24,fsize+1); localStorage.setItem('salat-font',fsize); apply(); };
+document.getElementById('fontMinus').onclick = ()=>{ fsize=Math.max(16,fsize-1); localStorage.setItem('salat-font',fsize); apply(); };
+apply();
+// تمييز القسم النشط
+const links=[...document.querySelectorAll('.toc a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-30% 0px -60% 0px'});
+secs.forEach(s=>s&&io.observe(s));
+</script>
+<script>
+// تسجيل عامل الخدمة: فقط على الموقع المنشور (http/https غير محلي) وخارج إطارات المعاينة — لا يُسجَّل في التطوير ولا داخل المعاينة
+(function(){if(!('serviceWorker' in navigator))return;if(window.self!==window.top)return;if(!/^https?:$/.test(location.protocol))return;var h=location.hostname||'';if(h===''||h==='localhost'||h==='127.0.0.1'||h==='[::1]'||/\.local$/.test(h)||/^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(h))return;window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});})();
+</script>
+<script>
+// إشعار التثبيت كتطبيق: يظهر بعد 3 ثوانٍ مرة واحدة كل 7 أيام، ولا يظهر داخل المعاينة ولا إذا كان التطبيق مثبتًا
+(function(){
+  var pop=document.getElementById('installPop');if(!pop||window.self!==window.top)return;
+  function isStandalone(){return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;}
+  if(isStandalone())return;
+  var KEY='salat-install-dismissed';
+  try{if(Date.now()-(parseInt(localStorage.getItem(KEY)||'0',10))<7*864e5)return;}catch(e){}
+  var deferred=null,btn=document.getElementById('installBtn'),hint=document.getElementById('installPopHint');
+  var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent||'');
+  function hide(save){pop.hidden=true;if(save){try{localStorage.setItem(KEY,String(Date.now()));}catch(e){}}}
+  document.getElementById('installLater').onclick=function(){hide(true);};
+  document.getElementById('installX').onclick=function(){hide(true);};
+  if(isIOS){hint.textContent='من زر المشاركة ⎙ اختر «إضافة إلى الشاشة الرئيسية»';btn.textContent='فهمت';btn.onclick=function(){hide(true);};setTimeout(function(){pop.hidden=false;},3000);return;}
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;setTimeout(function(){pop.hidden=false;},3000);});
+  btn.onclick=function(){if(!deferred){hide(false);return;}try{deferred.prompt();deferred.userChoice.then(function(){deferred=null;hide(true);}).catch(function(){});}catch(e){hide(false);}};
+  window.addEventListener('appinstalled',function(){hide(true);});
+})();
+</script>
+</body>
+</html>
